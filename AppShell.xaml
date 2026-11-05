@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<Shell
+    x:Class="MauiApp1.AppShell"
+    xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    Title="Prueba SQLite">
+
+    <!-- El contenido de vPersona se asigna en el code-behind mediante DI,
+         porque la página necesita recibir PersonRepository por constructor. -->
+    <ShellContent x:Name="PersonasContent"
+                  Title="Personas"
+                  Route="vPersona" />
+
+</Shell>

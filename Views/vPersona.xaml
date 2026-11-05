@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="MauiApp1.Views.vPersona"
+             Title="Personas - SQLite">
+
+    <ScrollView>
+        <VerticalStackLayout Padding="16" Spacing="10">
+
+            <Label Text="Id: mostrar (* = todos) o eliminar (número)"
+                   FontSize="12"
+                   TextColor="Gray" />
+            <Entry x:Name="IdEntry"
+                   Placeholder="Ej: 1  o  *"
+                   BackgroundColor="#F5F5F5" />
+
+            <Label Text="Nombre (solo para insertar)" FontSize="12" TextColor="Gray" />
+            <Entry x:Name="NombreEntry" Placeholder="Nombre" />
+
+            <BoxView HeightRequest="1" Color="LightGray" Margin="0,4" />
+
+            <VerticalStackLayout Spacing="8">
+                <Button Text="INSERTAR"
+                        BackgroundColor="#6A1B9A"
+                        TextColor="White"
+                        Clicked="OnInsertarClicked" />
+                <Button Text="MOSTRAR"
+                        BackgroundColor="#6A1B9A"
+                        TextColor="White"
+                        Clicked="OnMostrarClicked" />
+                <Button Text="ELIMINAR"
+                        BackgroundColor="#6A1B9A"
+                        TextColor="White"
+                        Clicked="OnEliminarClicked" />
+            </VerticalStackLayout>
+
+            <BoxView HeightRequest="1" Color="LightGray" />
+
+            <Label Text="Resultado (Id   Nombre)"
+                   FontAttributes="Bold" />
+
+            <CollectionView x:Name="PersonasView"
+                            HeightRequest="280"
+                            SelectionMode="None">
+                <CollectionView.ItemTemplate>
+                    <DataTemplate>
+                        <Border Padding="12,8" Margin="0,2" Stroke="LightGray" StrokeThickness="1">
+                            <Grid ColumnDefinitions="48,*" ColumnSpacing="16">
+                                <Label Text="{Binding Id}"
+                                       FontAttributes="Bold"
+                                       TextColor="#1565C0"
+                                       VerticalOptions="Center"
+                                       HorizontalTextAlignment="End" />
+                                <Label Grid.Column="1"
+                                       Text="{Binding Nombre}"
+                                       VerticalOptions="Center" />
+                            </Grid>
+                        </Border>
+                    </DataTemplate>
+                </CollectionView.ItemTemplate>
+            </CollectionView>
+
+        </VerticalStackLayout>
+    </ScrollView>
+
+</ContentPage>

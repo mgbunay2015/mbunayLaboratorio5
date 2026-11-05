@@ -1,0 +1,37 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="MauiApp1.MainPage"
+             Title="Personas SQLite">
+
+    <ScrollView>
+        <VerticalStackLayout Padding="20" Spacing="12">
+            <Label Text="Persona (Id + Nombre)"
+                   FontSize="22"
+                   FontAttributes="Bold"
+                   HorizontalOptions="Center" />
+
+            <Entry x:Name="IdEntry" Placeholder="Id (solo lectura al insertar)" IsReadOnly="True" BackgroundColor="#F0F0F0" />
+            <Entry x:Name="NombreEntry" Placeholder="Nombre *" />
+
+            <HorizontalStackLayout Spacing="10" HorizontalOptions="Center">
+                <Button x:Name="GuardarBtn" Text="Guardar" Clicked="OnGuardarClicked" />
+                <Button x:Name="LimpiarBtn" Text="Limpiar" Clicked="OnLimpiarClicked" />
+            </HorizontalStackLayout>
+
+            <Label x:Name="EstadoLabel" Text="" FontAttributes="Italic" HorizontalOptions="Center" />
+
+            <CollectionView x:Name="PersonasView" HeightRequest="320">
+                <CollectionView.ItemTemplate>
+                    <DataTemplate>
+                        <Grid Padding="8" ColumnDefinitions="Auto,*">
+                            <Label Grid.Column="0" Text="{Binding Id, StringFormat='{0} - '}" FontAttributes="Bold" />
+                            <Label Grid.Column="1" Text="{Binding Nombre}" />
+                        </Grid>
+                    </DataTemplate>
+                </CollectionView.ItemTemplate>
+            </CollectionView>
+        </VerticalStackLayout>
+    </ScrollView>
+
+</ContentPage>
