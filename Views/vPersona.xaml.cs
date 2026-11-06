@@ -1,5 +1,6 @@
 using MauiApp1.Models;
 using MauiApp1.Repository;
+
 namespace MauiApp1.Views;
 
 public partial class vPersona : ContentPage
@@ -16,7 +17,6 @@ public partial class vPersona : ContentPage
     {
         base.OnAppearing();
         PersonasView.ItemsSource = Array.Empty<Persona>();
-
         await _repository.InitAsync();
     }
 
@@ -31,7 +31,6 @@ public partial class vPersona : ContentPage
         try
         {
             var persona = new Persona { Nombre = NombreEntry.Text.Trim() };
-            // InsertAsync escribe en el archivo SQLite (uisrael.db) de forma permanente.
             bool ok = await _repository.SavePersonAsync(persona);
 
             if (!ok)
@@ -52,6 +51,48 @@ public partial class vPersona : ContentPage
 
     private async void OnMostrarClicked(object? sender, EventArgs e)
     {
+        await MostrarSegunBusquedaAsync();
+    }
+
+    private async void OnModificarClicked(object? sender, EventArgs e)
+    {
+        var texto = IdEntry.Text?.Trim() ?? string.Empty;
+
+        if (texto == "*" || string.IsNullOrEmpty(texto))
+        {
+            await DisplayAlertAsync("Modificar", "Escribe el Id numérico del registro a modificar (no uses *).", "OK");
+            return;
+        }
+
+        if (!int.TryParse(texto, out var id) || id <= 0)
+        {
+            await DisplayAlertAsync("Modificar", "Id no válido.", "OK");
+            return;
+        }
+
+        if (string.IsNullOrWhiteSpace(NombreEntry.Text))
+        {
+            await DisplayAlertAsync("Modificar", "Escribe el nuevo nombre.", "OK");
+            return;
+        }
+
+        var existente = await _repository.GetPersonByIdAsync(id);
+        if (existente is null)
+        {
+            await DisplayAlertAsync("Modificar", $"No existe el Id {id}.", "OK");
+            return;
+        }
+
+        existente.Nombre = NombreEntry.Text.Trim();
+        bool ok = await _repository.SavePersonAsync(existente);
+
+        if (!ok)
+        {
+            await DisplayAlertAsync("Modificar", _repository.Message, "OK");
+            return;
+        }
+
+        await DisplayAlertAsync("Modificar", $"Id {id} actualizado.", "OK");
         await MostrarSegunBusquedaAsync();
     }
 
@@ -85,9 +126,6 @@ public partial class vPersona : ContentPage
         await MostrarSegunBusquedaAsync();
     }
 
-    /// <summary>
-    /// Despliega en el listado según la caja Id: * = todos, número = ese Id.
-    /// </summary>
     private async Task MostrarSegunBusquedaAsync()
     {
         var texto = IdEntry.Text?.Trim() ?? string.Empty;

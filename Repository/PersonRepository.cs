@@ -4,11 +4,6 @@ using SQLite;
 
 namespace MauiApp1.Repository
 {
-    /// <summary>
-    /// Repositorio de acceso a datos para la tabla Persona.
-    /// Encapsula la conexión SQLite y expone las operaciones CRUD,
-    /// de modo que las vistas/páginas no conozcan SQLite directamente.
-    /// </summary>
     public class PersonRepository
     {
         private const string DatabaseFileName = FileAccessHelper.DatabaseFileName;
@@ -20,17 +15,11 @@ namespace MauiApp1.Repository
 
         private SQLiteAsyncConnection? _database;
 
-        /// <summary>Último mensaje de resultado o de error.</summary>
         public string Message { get; internal set; } = string.Empty;
 
-        /// <summary>Ruta física del archivo de base de datos.</summary>
         public static string DatabasePath =>
             FileAccessHelper.GetDatabasePath();
 
-        /// <summary>
-        /// Abre la conexión (una sola vez) y crea la tabla si no existe.
-        /// Es seguro llamarlo varias veces o desde varios hilos.
-        /// </summary>
         public async Task InitAsync()
         {
             if (_database is not null)
@@ -40,8 +29,6 @@ namespace MauiApp1.Repository
             await FileAccessHelper.EnsurePersonaSchemaAsync(_database);
         }
 
-        /// <summary>Inserta una persona nueva (solo Nombre; Id autogenerado).</summary>
-        /// <returns>Id generado, o 0 si hubo error.</returns>
         public async Task<int> AddPersonAsync(string name)
         {
             if (string.IsNullOrWhiteSpace(name))
@@ -74,7 +61,6 @@ namespace MauiApp1.Repository
             }
         }
 
-        /// <summary>Devuelve todas las personas ordenadas por apellido y nombre.</summary>
         public async Task<List<Persona>> GetPersonsAsync()
         {
             try
@@ -92,7 +78,6 @@ namespace MauiApp1.Repository
             }
         }
 
-        /// <summary>Busca una persona por Id. Devuelve null si no existe.</summary>
         public async Task<Persona?> GetPersonByIdAsync(int id)
         {
             try
@@ -107,8 +92,6 @@ namespace MauiApp1.Repository
             }
         }
 
-        /// <summary>Inserta o actualiza según el Id de la persona.</summary>
-        /// <returns>true si la operación se aplicó.</returns>
         public async Task<bool> SavePersonAsync(Persona persona)
         {
             ArgumentNullException.ThrowIfNull(persona);
@@ -134,8 +117,6 @@ namespace MauiApp1.Repository
             }
         }
 
-        /// <summary>Elimina una persona por Id.</summary>
-        /// <returns>true si se eliminó.</returns>
         public async Task<bool> DeletePersonAsync(int id)
         {
             try
@@ -153,7 +134,6 @@ namespace MauiApp1.Repository
             }
         }
 
-        /// <summary>Elimina todos los registros de la tabla.</summary>
         public async Task<int> DeleteAllAsync()
         {
             try
@@ -168,7 +148,6 @@ namespace MauiApp1.Repository
             }
         }
 
-        /// <summary>Total de personas registradas.</summary>
         public async Task<int> CountAsync()
         {
             try
@@ -183,9 +162,6 @@ namespace MauiApp1.Repository
             }
         }
 
-        /// <summary>
-        /// Cierra la conexión. Útil al cerrar la app o en pruebas.
-        /// </summary>
         public async Task CloseAsync()
         {
             if (_database is null)

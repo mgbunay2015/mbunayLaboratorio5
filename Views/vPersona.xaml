@@ -7,14 +7,14 @@
     <ScrollView>
         <VerticalStackLayout Padding="16" Spacing="10">
 
-            <Label Text="Id: mostrar (* = todos) o eliminar (número)"
+            <Label Text="Id: * = todos | número = modificar / eliminar / filtrar"
                    FontSize="12"
                    TextColor="Gray" />
             <Entry x:Name="IdEntry"
                    Placeholder="Ej: 1  o  *"
                    BackgroundColor="#F5F5F5" />
 
-            <Label Text="Nombre (solo para insertar)" FontSize="12" TextColor="Gray" />
+            <Label Text="Nombre (insertar o modificar)" FontSize="12" TextColor="Gray" />
             <Entry x:Name="NombreEntry" Placeholder="Nombre" />
 
             <BoxView HeightRequest="1" Color="LightGray" Margin="0,4" />
@@ -28,6 +28,10 @@
                         BackgroundColor="#6A1B9A"
                         TextColor="White"
                         Clicked="OnMostrarClicked" />
+                <Button Text="MODIFICAR"
+                        BackgroundColor="#6A1B9A"
+                        TextColor="White"
+                        Clicked="OnModificarClicked" />
                 <Button Text="ELIMINAR"
                         BackgroundColor="#6A1B9A"
                         TextColor="White"

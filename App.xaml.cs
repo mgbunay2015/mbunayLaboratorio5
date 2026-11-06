@@ -8,14 +8,8 @@ namespace MauiApp1
 {
     public partial class App : Application
     {
-        /// <summary>
-        /// Servicio de base de datos disponible para todas las páginas.
-        /// </summary>
         public static PersonaDatabase Database { get; private set; } = null!;
 
-        /// <summary>
-        /// Repositorio de personas disponible para todas las páginas.
-        /// </summary>
         public static PersonRepository Repository { get; private set; } = null!;
 
         private readonly IServiceProvider _services;
@@ -28,26 +22,14 @@ namespace MauiApp1
             Repository = repository;
             _services = services;
 
-            // Se crea el archivo uisrael.db y la tabla Persona de forma
-            // SÍNCRONA, antes de que se muestre cualquier pantalla.
-            // Así vPersona nunca encuentra la tabla sin crear ni compite
-            // con una tarea en segundo plano.
             InicializarBaseDeDatos();
         }
 
-        /// <summary>
-        /// Crea el archivo de base de datos y la tabla Persona usando
-        /// <see cref="FileAccessHelper"/>. La conexión se cierra al salir
-        /// para que el repositorio no encuentre el archivo bloqueado.
-        /// </summary>
         private static void InicializarBaseDeDatos()
         {
             try
             {
-                using (var connection = FileAccessHelper.CrearBaseDeDatos())
-                {
-                    // La conexión se abre, se crea la tabla y se cierra aquí mismo.
-                }
+                using var connection = FileAccessHelper.CrearBaseDeDatos();
 
                 Repository.Message = $"Base de datos lista: {FileAccessHelper.DatabaseFileName}";
 
@@ -57,7 +39,6 @@ namespace MauiApp1
             }
             catch (Exception ex)
             {
-                // Se guarda el error en vez de tragárselo en silencio.
                 Repository.Message = $"Error al inicializar la base de datos: {ex.Message}";
                 Debug.WriteLine($"[SQLite] {Repository.Message}");
             }
@@ -65,8 +46,6 @@ namespace MauiApp1
 
         protected override Window CreateWindow(IActivationState? activationState)
         {
-            // AppShell se resuelve desde el contenedor para que reciba
-            // vPersona (y ésta el PersonRepository) por constructor.
             var shell = _services.GetRequiredService<AppShell>();
 
             return new Window(shell);
